@@ -20,20 +20,27 @@ async function main() {
 }
 
 async function seedRooms() {
-  const totalOfRooms = 16;
-  const initialRoom = 100;
-  let roomType = 1;
-  for (let i = 1; i <= totalOfRooms; i++) {
-    await prisma.room.create({
-      data: {
-        name: String(initialRoom + i),
-        capacity: roomType,
-        hotelId: 1,
-        updatedAt: dayjs().toDate(),
-      },
-    });
-    roomType++;
-    if (roomType > 3) roomType = 1;
+  let hotel = await prisma.room.findFirst({
+    where: {
+      hotelId: 1,
+    },
+  });
+  if (!hotel) {
+    const totalOfRooms = 16;
+    const initialRoom = 100;
+    let roomType = 1;
+    for (let i = 1; i <= totalOfRooms; i++) {
+      await prisma.room.create({
+        data: {
+          name: String(initialRoom + i),
+          capacity: roomType,
+          hotelId: 1,
+          updatedAt: dayjs().toDate(),
+        },
+      });
+      roomType++;
+      if (roomType > 3) roomType = 1;
+    }
   }
 }
 
