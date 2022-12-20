@@ -17,6 +17,19 @@ async function main() {
   }
 
   console.log({ event });
+
+  let hotel = await prisma.hotel.findFirst();
+  if (!hotel) {
+    hotel = await prisma.hotel.create({
+      data: {
+        name: "Hotel Sunset",
+        image: "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",            
+      },
+    });
+  }
+
+  console.log({ hotel });
+
 }
 
 main()
