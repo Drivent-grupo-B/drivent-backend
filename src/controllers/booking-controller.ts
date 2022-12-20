@@ -42,7 +42,6 @@ export async function bookingRoom(req: AuthenticatedRequest, res: Response) {
 export async function changeBooking(req: AuthenticatedRequest, res: Response) {
   try {
     const { userId } = req;
-    console.log(userId);
 
     const roomId = Number(req.body.roomId);
 
