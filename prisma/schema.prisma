@@ -24,8 +24,6 @@ model User {
 model Session {
   id        Int      @id @default(autoincrement())
   userId    Int
-  User      User     @relation(fields: [userId], references: [id])
-  token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -39,6 +37,15 @@ model Event {
   endsAt             DateTime
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+}
+
+model DaysEvent {
+  id         Int      @id @default(autoincrement())
+  Day        DateTime 
+  eventId    Int      @unique
+  Event      Event    @relation(fields: [eventId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Enrollment {
