@@ -24,28 +24,54 @@ model User {
 model Session {
   id        Int      @id @default(autoincrement())
   userId    Int
+  User      User     @relation(fields: [userId], references: [id])
+  token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Event {
-  id                 Int      @id @default(autoincrement())
-  title              String   @db.VarChar(255)
-  backgroundImageUrl String   @db.VarChar(255)
-  logoImageUrl       String   @db.VarChar(255)
+  id                 Int         @id @default(autoincrement())
+  title              String      @db.VarChar(255)
+  backgroundImageUrl String      @db.VarChar(255)
+  logoImageUrl       String      @db.VarChar(255)
   startsAt           DateTime
   endsAt             DateTime
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  DaysEvent          DaysEvent[]
 }
 
 model DaysEvent {
-  id         Int      @id @default(autoincrement())
-  Day        DateTime 
-  eventId    Int      @unique
-  Event      Event    @relation(fields: [eventId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          Int           @id @default(autoincrement())
+  Day         DateTime
+  Event       Event         @relation(fields: [EventId], references: [id])
+  EventId     Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ScheduleDay ScheduleDay[]
+}
+
+model ScheduleDay {
+  id          Int         @id @default(autoincrement())
+  DaysEventId Int
+  DaysEvent   DaysEvent   @relation(fields: [DaysEventId], references: [id])
+  MainAudito  Boolean
+  RoomWork    Boolean
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Activitie   Activitie[]
+}
+
+model Activitie {
+  id            Int         @id @default(autoincrement())
+  name          String      @db.VarChar(255)
+  hourInit      DateTime
+  hourfinal     DateTime
+  ScheduleDayId Int
+  ScheduleDay   ScheduleDay @relation(fields: [ScheduleDayId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Enrollment {
