@@ -19,11 +19,11 @@ async function main() {
   console.log({ event });
 
   let hotel = await prisma.hotel.findFirst();
-  if (!hotel) {
+  if (hotel) {
     hotel = await prisma.hotel.create({
       data: {
-        name: "Hotel Sunset",
-        image: "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",            
+        name: "Hotel Alvorada",
+        image: "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768",            
       },
     });
   }
@@ -48,7 +48,7 @@ async function seedRooms() {
         data: {
           name: String(initialRoom + i),
           capacity: roomType,
-          hotelId: hotel.id,
+          hotelId: hotel ? hotel.id : 1,
           updatedAt: dayjs().toDate(),
         },
       });

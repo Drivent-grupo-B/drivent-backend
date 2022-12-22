@@ -51,9 +51,7 @@ export async function changeBooking(req: AuthenticatedRequest, res: Response) {
 
     const booking = await bookingService.changeBookingRoomById(userId, roomId);
 
-    return res.status(httpStatus.OK).send({
-      bookingId: booking.id,
-    });
+    return res.status(httpStatus.OK).send(booking);
   } catch (error) {
     if (error.name === "CannotBookingError") {
       return res.sendStatus(httpStatus.FORBIDDEN);
