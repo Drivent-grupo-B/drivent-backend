@@ -33,12 +33,13 @@ async function main() {
 }
 
 async function seedRooms() {
-  let hotel = await prisma.room.findFirst({
+  let room = await prisma.room.findFirst({
     where: {
-      hotelId: 2,
+      hotelId: 1,
     },
   });
-  if (!hotel) {
+  if (!room) {
+    const hotel = await prisma.hotel.findFirst();
     const totalOfRooms = 16;
     const initialRoom = 100;
     let roomType = 1;
@@ -47,7 +48,7 @@ async function seedRooms() {
         data: {
           name: String(initialRoom + i),
           capacity: roomType,
-          hotelId: 2,
+          hotelId: hotel ? hotel.id : 1,
           updatedAt: dayjs().toDate(),
         },
       });
