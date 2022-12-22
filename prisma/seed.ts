@@ -177,7 +177,7 @@ async function seedTicketTypes(){
     let ticketType = await prisma.ticketType.create({
       data: {
         name: 'Online',
-        price: 30000,
+        price: 100000,
         isRemote: true,
         includesHotel: false
       },
@@ -190,6 +190,15 @@ async function seedTicketTypes(){
         price: 60000,
         isRemote: false,
         includesHotel: true,
+      },
+    })
+
+    ticketType = await prisma.ticketType.create({
+      data: {
+        name: 'Presencial',
+        price: 25000,
+        isRemote: false,
+        includesHotel: false,
       },
     })
 
