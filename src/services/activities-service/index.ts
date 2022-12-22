@@ -4,8 +4,13 @@ async function listDays() {
   return await activitiesRepository.findMany();
 }
 
+async function listactivitiesDay(dayId: number) {
+  return await activitiesRepository.findFirstDayId(dayId);
+}
+
 const activitiesService = {
-  listDays
+  listDays,
+  listactivitiesDay
 };
 
 export default activitiesService;

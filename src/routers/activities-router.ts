@@ -7,6 +7,6 @@ const activitiesRoute = Router();
 activitiesRoute
   .all("/*", authenticateToken)
   .get("/day", listDays)
-  .get("/activities/:dayId", activitiesDay);
+  .get("/day/:dayId", activitiesDay);
 
 export { activitiesRoute };

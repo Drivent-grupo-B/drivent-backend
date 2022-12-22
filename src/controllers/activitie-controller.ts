@@ -14,8 +14,11 @@ export async function listDays(req: AuthenticatedRequest, res: Response) {
 
 export async function activitiesDay(req: AuthenticatedRequest, res: Response) {
   try {
-    //const days = await activitiesService.listactivitiesDay(dayId);
-    return res.status(httpStatus.OK).send();
+    const dayId = Number(req.params.dayId);
+
+    const list = await activitiesService.listactivitiesDay(dayId);
+
+    return res.status(httpStatus.OK).send(list);
   } catch (error) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
