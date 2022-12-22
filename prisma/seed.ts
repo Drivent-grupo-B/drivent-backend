@@ -114,16 +114,18 @@ async function seedActivities() {
     console.log(activityRoom);
   }
 
-  const dayEvent = await prisma.daysEvent.findFirst();
+  await prisma.activity.deleteMany();
+
+  const dayEventList = await prisma.daysEvent.findMany();
   activityRooms = await prisma.activityRoom.findMany();
 
   let activity = await prisma.activity.create({
     data: {
       name: 'Atividade 1',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      startTime: new Date(dayEventList[0].Day.getFullYear(), dayEventList[0].Day.getMonth(), dayEventList[0].Day.getDay(), 10),
+      endTime: new Date(dayEventList[0].Day.getFullYear(), dayEventList[0].Day.getMonth(), dayEventList[0].Day.getDay(), 11),
       ActivityRoomId: activityRooms[0].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[0].id,
     }
   });
 
@@ -132,10 +134,10 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 2',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 12),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 14),
+      startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 12),
+      endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 14),
       ActivityRoomId: activityRooms[0].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[1].id,
     }
   });
 
@@ -144,10 +146,10 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 3',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 10),
+      endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 11),
       ActivityRoomId: activityRooms[1].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[1].id,
     }
   });
 
@@ -156,10 +158,10 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 4',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 10),
+      endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 11),
       ActivityRoomId: activityRooms[2].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[1].id,
     }
   });
 
