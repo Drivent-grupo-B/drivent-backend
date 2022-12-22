@@ -58,6 +58,114 @@ async function seedRooms() {
   }
 }
 
+async function seedActivities() {
+  const daysEvent = await prisma.daysEvent.findMany();
+  const event = await prisma.event.findFirst();
+  if (daysEvent.length < 2) {
+    await prisma.daysEvent.deleteMany({});
+    let dayEvent = await prisma.daysEvent.create({
+      data: {
+        Day: dayjs().add(19, 'days').toDate(),
+        EventId: event?.id,
+      }
+    });
+
+    console.log(dayEvent);
+
+    dayEvent = await prisma.daysEvent.create({
+      data: {
+        Day: dayjs().add(20, 'days').toDate(),
+        EventId: event?.id,
+      }
+    });
+
+    console.log(dayEvent);
+  }
+
+  let activityRooms = await prisma.activityRoom.findMany();
+  if (activityRooms.length < 3) {
+    await prisma.activityRoom.deleteMany({});
+    const event = await prisma.event.findFirst();
+    let activityRoom = await prisma.activityRoom.create({
+      data: {
+        EventId: event?.id,
+        name: 'Auditório principal'
+      }
+    });
+
+    console.log(activityRoom);
+
+    activityRoom = await prisma.activityRoom.create({
+      data: {
+        EventId: event?.id,
+        name: 'Auditório 1'
+      }
+    });
+
+    console.log(activityRoom);
+
+    activityRoom = await prisma.activityRoom.create({
+      data: {
+        EventId: event?.id,
+        name: 'Auditório 2'
+      }
+    });
+
+    console.log(activityRoom);
+  }
+
+  const dayEvent = await prisma.daysEvent.findFirst();
+  activityRooms = await prisma.activityRoom.findMany();
+
+  let activity = await prisma.activity.create({
+    data: {
+      name: 'Atividade 1',
+      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
+      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      ActivityRoomId: activityRooms[0].id,
+      DaysEventId: dayEvent?.id,
+    }
+  });
+
+  console.log(activity);
+
+  activity = await prisma.activity.create({
+    data: {
+      name: 'Atividade 2',
+      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 12),
+      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 14),
+      ActivityRoomId: activityRooms[0].id,
+      DaysEventId: dayEvent?.id,
+    }
+  });
+
+  console.log(activity);
+
+  activity = await prisma.activity.create({
+    data: {
+      name: 'Atividade 3',
+      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
+      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      ActivityRoomId: activityRooms[1].id,
+      DaysEventId: dayEvent?.id,
+    }
+  });
+
+  console.log(activity);
+
+  activity = await prisma.activity.create({
+    data: {
+      name: 'Atividade 4',
+      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
+      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      ActivityRoomId: activityRooms[2].id,
+      DaysEventId: dayEvent?.id,
+    }
+  });
+
+  console.log(activity);
+}
+
 main()
   .catch((e) => {
     console.error(e);
@@ -68,6 +176,15 @@ main()
   });
 
 seedRooms()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
+seedActivities()
   .catch((e) => {
     console.error(e);
     process.exit(1);

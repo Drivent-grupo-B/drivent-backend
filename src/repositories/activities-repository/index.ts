@@ -8,9 +8,6 @@ async function findFirstDayId(dayId: number) {
   return prisma.daysEvent.findMany({
     where: {
       id: dayId
-    },
-    include: {
-      ScheduleDay: true
     }
   });
 }
