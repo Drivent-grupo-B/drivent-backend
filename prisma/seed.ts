@@ -19,7 +19,7 @@ async function main() {
   console.log({ event });
 
   let hotel = await prisma.hotel.findFirst();
-  if (hotel) {
+  if (!hotel) {
     hotel = await prisma.hotel.create({
       data: {
         name: "Hotel Alvorada",
@@ -48,7 +48,7 @@ async function seedRooms() {
         data: {
           name: String(initialRoom + i),
           capacity: roomType,
-          hotelId: hotel ? hotel.id : 1,
+          hotelId: hotel?.id,
           updatedAt: dayjs().toDate(),
         },
       });
@@ -57,6 +57,7 @@ async function seedRooms() {
     }
   }
 }
+
 
 async function seedActivities() {
   const daysEvent = await prisma.daysEvent.findMany();
@@ -168,6 +169,44 @@ async function seedActivities() {
   console.log(activity);
 }
 
+async function seedTicketTypes(){
+  await prisma.ticketType.deleteMany()
+  const ticketType = await prisma.ticketType.findMany()
+
+  if(ticketType.length === 0){
+    let ticketType = await prisma.ticketType.create({
+      data: {
+        name: 'Online',
+        price: 100000,
+        isRemote: true,
+        includesHotel: false
+      },
+    });
+    console.log(ticketType)
+
+    ticketType = await prisma.ticketType.create({
+      data: {
+        name: 'Presencial',
+        price: 60000,
+        isRemote: false,
+        includesHotel: true,
+      },
+    })
+
+    ticketType = await prisma.ticketType.create({
+      data: {
+        name: 'Presencial',
+        price: 25000,
+        isRemote: false,
+        includesHotel: false,
+      },
+    })
+
+    console.log(ticketType)
+  }
+
+}
+
 main()
   .catch((e) => {
     console.error(e);
@@ -187,6 +226,15 @@ seedRooms()
   });
 
 seedActivities()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
+seedTicketTypes()
   .catch((e) => {
     console.error(e);
     process.exit(1);
