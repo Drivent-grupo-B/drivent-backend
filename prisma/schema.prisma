@@ -40,6 +40,7 @@ model Event {
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
   DaysEvent          DaysEvent[]
+  AcitiviyRoom       ActivityRoom[]
 }
 
 model DaysEvent {
@@ -49,29 +50,30 @@ model DaysEvent {
   EventId     Int
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  ScheduleDay ScheduleDay[]
+  Activity    Activity[]
 }
 
-model ScheduleDay {
-  id          Int         @id @default(autoincrement())
-  DaysEventId Int
-  DaysEvent   DaysEvent   @relation(fields: [DaysEventId], references: [id])
-  MainAudito  Boolean
-  RoomWork    Boolean
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  Activitie   Activitie[]
+model Activity {
+  id             Int          @id @default(autoincrement())
+  name           String       @db.VarChar(255)
+  startTime      DateTime
+  endTime        DateTime
+  DaysEventId    Int
+  DaysEvent      DaysEvent    @relation(fields: [DaysEventId], references: [id])
+  ActivityRoomId Int
+  ActivityRoom   ActivityRoom @relation(fields: [ActivityRoomId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
-model Activitie {
+model ActivityRoom {
   id            Int         @id @default(autoincrement())
   name          String      @db.VarChar(255)
-  hourInit      DateTime
-  hourfinal     DateTime
-  ScheduleDayId Int
-  ScheduleDay   ScheduleDay @relation(fields: [ScheduleDayId], references: [id])
+  Event         Event       @relation(fields: [EventId], references: [id])
+  EventId       Int
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  Activity      Activity[]
 }
 
 model Enrollment {
