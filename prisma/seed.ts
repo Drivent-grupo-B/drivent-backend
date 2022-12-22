@@ -19,7 +19,7 @@ async function main() {
   console.log({ event });
 
   let hotel = await prisma.hotel.findFirst();
-  if (hotel) {
+  if (!hotel) {
     hotel = await prisma.hotel.create({
       data: {
         name: "Hotel Alvorada",
@@ -48,7 +48,7 @@ async function seedRooms() {
         data: {
           name: String(initialRoom + i),
           capacity: roomType,
-          hotelId: hotel ? hotel.id : 1,
+          hotelId: hotel?.id,
           updatedAt: dayjs().toDate(),
         },
       });
@@ -57,6 +57,7 @@ async function seedRooms() {
     }
   }
 }
+
 
 async function seedActivities() {
   const daysEvent = await prisma.daysEvent.findMany();
@@ -114,16 +115,18 @@ async function seedActivities() {
     console.log(activityRoom);
   }
 
-  const dayEvent = await prisma.daysEvent.findFirst();
+  await prisma.activity.deleteMany();
+
+  const dayEventList = await prisma.daysEvent.findMany();
   activityRooms = await prisma.activityRoom.findMany();
 
   let activity = await prisma.activity.create({
     data: {
       name: 'Atividade 1',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      startTime: new Date(dayEventList[0].Day.getFullYear(), dayEventList[0].Day.getMonth(), dayEventList[0].Day.getDay(), 10),
+      endTime: new Date(dayEventList[0].Day.getFullYear(), dayEventList[0].Day.getMonth(), dayEventList[0].Day.getDay(), 11),
       ActivityRoomId: activityRooms[0].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[0].id,
     }
   });
 
@@ -132,10 +135,10 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 2',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 12),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 14),
+      startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 12),
+      endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 14),
       ActivityRoomId: activityRooms[0].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[1].id,
     }
   });
 
@@ -144,10 +147,10 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 3',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 10),
+      endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 11),
       ActivityRoomId: activityRooms[1].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[1].id,
     }
   });
 
@@ -156,14 +159,43 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 4',
-      startTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 10),
-      endTime: new Date(dayEvent.Day.getFullYear(), dayEvent.Day.getMonth(), dayEvent.Day.getDay(), 11),
+      startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 10),
+      endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 11),
       ActivityRoomId: activityRooms[2].id,
-      DaysEventId: dayEvent?.id,
+      DaysEventId: dayEventList[1].id,
     }
   });
 
   console.log(activity);
+}
+
+async function seedTicketTypes(){
+  await prisma.ticketType.deleteMany()
+  const ticketType = await prisma.ticketType.findMany()
+
+  if(ticketType.length === 0){
+    let ticketType = await prisma.ticketType.create({
+      data: {
+        name: 'Online',
+        price: 30000,
+        isRemote: true,
+        includesHotel: false
+      },
+    });
+    console.log(ticketType)
+
+    ticketType = await prisma.ticketType.create({
+      data: {
+        name: 'Presencial',
+        price: 60000,
+        isRemote: false,
+        includesHotel: true,
+      },
+    })
+
+    console.log(ticketType)
+  }
+
 }
 
 main()
@@ -185,6 +217,15 @@ seedRooms()
   });
 
 seedActivities()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
+seedTicketTypes()
   .catch((e) => {
     console.error(e);
     process.exit(1);
