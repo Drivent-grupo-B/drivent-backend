@@ -20,10 +20,19 @@ async function findByDayId(dayId: number) {
   });
 }
 
+async function findById(activityId: number) {
+  return prisma.activity.findFirst({
+    where: {
+      id: activityId
+    }
+  });
+}
+
 const activitiesRepository = {
   findMany,
   findByDayId,
   findManyRooms,
+  findById,
 };
   
 export default activitiesRepository;  

@@ -33,28 +33,26 @@ async function main() {
 }
 
 async function seedRooms() {
-  let room = await prisma.room.findFirst({
-    where: {
-      hotelId: 1,
-    },
-  });
+  let room = await prisma.room.findFirst();
   if (!room) {
     const hotel = await prisma.hotel.findFirst();
-    const totalOfRooms = 16;
-    const initialRoom = 100;
-    let roomType = 1;
-    for (let i = 1; i <= totalOfRooms; i++) {
-      await prisma.room.create({
-        data: {
-          name: String(initialRoom + i),
-          capacity: roomType,
-          hotelId: hotel?.id,
-          updatedAt: dayjs().toDate(),
-        },
-      });
-      roomType++;
-      if (roomType > 3) roomType = 1;
-    }
+    if (hotel){
+      const totalOfRooms = 16;
+      const initialRoom = 100;
+      let roomType = 1;
+      for (let i = 1; i <= totalOfRooms; i++) {
+        await prisma.room.create({
+          data: {
+            name: String(initialRoom + i),
+            capacity: roomType,
+            hotelId: hotel.id,
+            updatedAt: dayjs().toDate(),
+          },
+        });
+        roomType++;
+        if (roomType > 3) roomType = 1;
+      }
+    }    
   }
 }
 
@@ -62,12 +60,12 @@ async function seedRooms() {
 async function seedActivities() {
   const daysEvent = await prisma.daysEvent.findMany();
   const event = await prisma.event.findFirst();
-  if (daysEvent.length < 2) {
+  if (daysEvent.length < 2 && event) {
     await prisma.daysEvent.deleteMany({});
     let dayEvent = await prisma.daysEvent.create({
       data: {
         Day: dayjs().add(19, 'days').toDate(),
-        EventId: event?.id,
+        EventId: event.id,
       }
     });
 
@@ -76,7 +74,7 @@ async function seedActivities() {
     dayEvent = await prisma.daysEvent.create({
       data: {
         Day: dayjs().add(20, 'days').toDate(),
-        EventId: event?.id,
+        EventId: event.id,
       }
     });
 
@@ -87,18 +85,18 @@ async function seedActivities() {
   if (activityRooms.length < 3) {
     await prisma.activityRoom.deleteMany({});
     const event = await prisma.event.findFirst();
-    let activityRoom = await prisma.activityRoom.create({
-      data: {
-        EventId: event?.id,
-        name: 'Auditório principal'
-      }
-    });
-
-    console.log(activityRoom);
+    if (event){
+      let activityRoom = await prisma.activityRoom.create({
+        data: {
+          EventId: event.id,
+          name: 'Auditório principal'
+        }
+      });
+      console.log(activityRoom);
 
     activityRoom = await prisma.activityRoom.create({
       data: {
-        EventId: event?.id,
+        EventId: event.id,
         name: 'Auditório 1'
       }
     });
@@ -107,12 +105,13 @@ async function seedActivities() {
 
     activityRoom = await prisma.activityRoom.create({
       data: {
-        EventId: event?.id,
+        EventId: event.id,
         name: 'Auditório 2'
       }
     });
 
     console.log(activityRoom);
+    }    
   }
 
   await prisma.activity.deleteMany();

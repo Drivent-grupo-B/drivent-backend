@@ -6,4 +6,5 @@ export * from "./tickets-controller";
 export * from "./payments-controller";
 export * from "./hotel-controller";
 export * from "./booking-controller";
-export * from "./activitie-controller";
+export * from "./activities-controller";
+export * from "./entries-controller";
