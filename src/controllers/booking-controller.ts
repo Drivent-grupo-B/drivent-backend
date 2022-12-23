@@ -53,10 +53,9 @@ export async function changeBooking(req: AuthenticatedRequest, res: Response) {
 
     return res.status(httpStatus.OK).send(booking);
   } catch (error) {
-    if (error.name === "CannotBookingError") {
+    if (error.name === "CannotBookingError" || error.name === "NotFoundError" ) {
       return res.sendStatus(httpStatus.FORBIDDEN);
-    }
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    }    
   }
 }
 
