@@ -21,10 +21,7 @@ async function createEntry(userId: number, activityId: number) {
     throw cannotEntryError();
   }
 
-  const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
-  if (ticket.TicketType.isRemote) {
-    throw cannotEntryError();
-  }
+  const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id); 
   if (ticket.status !== "PAID") {
     throw requestError(402, "PAYMENT_REQUIRED");
   }  

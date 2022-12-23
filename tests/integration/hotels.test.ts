@@ -100,7 +100,8 @@ describe("GET /hotels", () => {
           name: createdHotel.name,
           image: createdHotel.image,
           createdAt: createdHotel.createdAt.toISOString(),
-          updatedAt: createdHotel.updatedAt.toISOString()
+          updatedAt: createdHotel.updatedAt.toISOString(),
+          Rooms: []
         }
       ]);
     });
