@@ -123,6 +123,7 @@ async function seedActivities() {
   let activity = await prisma.activity.create({
     data: {
       name: 'Atividade 1',
+      capacity: 1,
       startTime: new Date(dayEventList[0].Day.getFullYear(), dayEventList[0].Day.getMonth(), dayEventList[0].Day.getDay(), 10),
       endTime: new Date(dayEventList[0].Day.getFullYear(), dayEventList[0].Day.getMonth(), dayEventList[0].Day.getDay(), 11),
       ActivityRoomId: activityRooms[0].id,
@@ -135,6 +136,7 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 2',
+      capacity: 100,
       startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 12),
       endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 14),
       ActivityRoomId: activityRooms[0].id,
@@ -159,6 +161,7 @@ async function seedActivities() {
   activity = await prisma.activity.create({
     data: {
       name: 'Atividade 4',
+      capacity: 2,
       startTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 10),
       endTime: new Date(dayEventList[1].Day.getFullYear(), dayEventList[1].Day.getMonth(), dayEventList[1].Day.getDay(), 11),
       ActivityRoomId: activityRooms[2].id,

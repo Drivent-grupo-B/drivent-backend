@@ -19,6 +19,7 @@ model User {
   Session    Session[]
   Enrollment Enrollment[]
   Booking    Booking[]
+  Entry      Entry[]
 }
 
 model Session {
@@ -58,12 +59,24 @@ model Activity {
   name           String       @db.VarChar(255)
   startTime      DateTime
   endTime        DateTime
+  capacity       Int          @default(1)
   DaysEventId    Int
   DaysEvent      DaysEvent    @relation(fields: [DaysEventId], references: [id])
   ActivityRoomId Int
   ActivityRoom   ActivityRoom @relation(fields: [ActivityRoomId], references: [id])
+  Entry          Entry[] 
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+}
+
+model Entry {
+  id        Int      @id @default(autoincrement())
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int      
+  Activity      Activity     @relation(fields: [activityId], references: [id])
+  activityId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ActivityRoom {
