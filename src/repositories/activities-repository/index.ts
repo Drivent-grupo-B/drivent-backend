@@ -15,6 +15,7 @@ async function findByDayId(dayId: number) {
     },
     include: {
       ActivityRoom: true,
+      Entry: true,
     }
   });
 }
