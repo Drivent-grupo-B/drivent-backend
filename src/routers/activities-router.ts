@@ -8,6 +8,7 @@ activitiesRoute
   .all("/*", authenticateToken)
   .get("/rooms", listActivitiesRooms)
   .get("/day", listDays)
-  .get("/day/:dayId", activitiesDay);
+  .get("/day/:dayId", activitiesDay)
+  .post("/entry");
 
 export { activitiesRoute };

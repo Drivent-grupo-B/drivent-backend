@@ -61,12 +61,12 @@ async function seedRooms() {
 async function seedActivities() {
   const daysEvent = await prisma.daysEvent.findMany();
   const event = await prisma.event.findFirst();
-  if (daysEvent.length < 2) {
+  if (daysEvent.length < 2 && event) {
     await prisma.daysEvent.deleteMany({});
     let dayEvent = await prisma.daysEvent.create({
       data: {
         Day: dayjs().add(19, 'days').toDate(),
-        EventId: event?.id,
+        EventId: event.id,
       }
     });
 

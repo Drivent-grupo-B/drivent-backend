@@ -19,10 +19,20 @@ async function findByDayId(dayId: number) {
   });
 }
 
+async function createEntry(userId: number, activityId: number) {
+  return prisma.entry.create({    
+    data: {
+      userId,
+      activityId
+    }
+  });
+}
+
 const activitiesRepository = {
   findMany,
   findByDayId,
   findManyRooms,
+  createEntry,
 };
   
 export default activitiesRepository;  
