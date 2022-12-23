@@ -20,11 +20,10 @@ async function findByDayId(dayId: number) {
   });
 }
 
-async function createEntry(userId: number, activityId: number) {
-  return prisma.entry.create({    
-    data: {
-      userId,
-      activityId
+async function findById(activityId: number) {
+  return prisma.activity.findFirst({
+    where: {
+      id: activityId
     }
   });
 }
@@ -33,7 +32,7 @@ const activitiesRepository = {
   findMany,
   findByDayId,
   findManyRooms,
-  createEntry,
+  findById,
 };
   
 export default activitiesRepository;  
