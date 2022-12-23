@@ -15,11 +15,6 @@ export function createEvent(params: Partial<Event> = {}): Promise<Event> {
   });
 }
 
-type CreateActivies = {
-  DaysEventId: number,
-  ActivityRoomId: number,
-}
-
 export function createDay(EventId: number) {
   return prisma.daysEvent.create({
     data: {
@@ -36,6 +31,11 @@ export function createActivityRoom(EventId: number) {
       EventId
     } 
   });
+}
+
+type CreateActivies = {
+  DaysEventId: number,
+  ActivityRoomId: number,
 }
 
 export function createActivies({ DaysEventId, ActivityRoomId }: CreateActivies) {
