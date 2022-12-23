@@ -1,4 +1,4 @@
-import { cannotEntryError, notFoundError } from "@/errors";
+import { cannotEntryError, requestError } from "@/errors";
 import activitiesRepository from "@/repositories/activities-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import ticketRepository from "@/repositories/ticket-repository";
@@ -18,14 +18,17 @@ async function listActivitiesDay(dayId: number) {
 async function createEntry(userId: number, activityId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) {
-    throw notFoundError();
+    throw cannotEntryError();
   }
 
   const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
-  if (ticket.TicketType.isRemote || ticket.status !== "PAID") {
+  if (ticket.TicketType.isRemote) {
     throw cannotEntryError();
+  }
+  if (ticket.status !== "PAID") {
+    throw requestError(402, "PAYMENT_REQUIRED");
   }  
-
+  //TODO: verify capacity and hours
   await activitiesRepository.createEntry(userId, activityId);
 
   return ticket;

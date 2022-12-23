@@ -32,3 +32,25 @@ export async function activitiesDay(req: AuthenticatedRequest, res: Response) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
+
+export async function createEntry(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+
+  //TODO validação do JOI
+  const { activityId } = req.body;
+
+  if (!activityId) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+
+  try {
+    const entry = await activitiesService.createEntry(userId, activityId);
+
+    return res.status(httpStatus.CREATED).send(entry.id);
+  } catch (error) {
+    if (error.name === "CannotEntryError") {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+    return res.sendStatus(httpStatus.PAYMENT_REQUIRED);
+  }
+}
