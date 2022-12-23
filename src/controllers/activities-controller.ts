@@ -37,7 +37,7 @@ export async function createEntry(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
 
   //TODO validação do JOI
-  const { activityId } = req.body;
+  const activityId  = Number(req.body.activityId);
 
   if (!activityId) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
