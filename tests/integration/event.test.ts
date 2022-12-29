@@ -34,3 +34,12 @@ describe("GET /event", () => {
     });
   });
 });
+
+describe("GET /event", () => {
+  it("should respond with status 404 if there is no event", async () => {
+    const response = await server.get("/");
+
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
+}
+);
