@@ -1,15 +1,20 @@
+import { notFoundError } from "@/errors";
 import activitiesRepository from "@/repositories/activities-repository";
 
 async function listRooms() {
-  return await activitiesRepository.findManyRooms();
+  const activitie = await activitiesRepository.findManyRooms();
+  if( activitie.length === 0 ) throw notFoundError();
+  return activitie;
 }
 
 async function listDays() {
-  return await activitiesRepository.findMany();
+  const activitie = await activitiesRepository.findMany();
+  if( activitie.length === 0 ) throw notFoundError();
+  return activitie;
 }
 
 async function listActivitiesDay(dayId: number) {
-  return await activitiesRepository.findByDayId(dayId);
+  return activitiesRepository.findByDayId(dayId);
 }
 
 const activitiesService = {

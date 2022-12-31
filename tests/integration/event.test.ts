@@ -6,6 +6,9 @@ import { cleanDb } from "../helpers";
 
 beforeAll(async () => {
   await init();
+});
+
+beforeEach(async () => {
   await cleanDb();
 });
 
@@ -37,9 +40,9 @@ describe("GET /event", () => {
 
 describe("GET /event", () => {
   it("should respond with status 404 if there is no event", async () => {
-    const response = await server.get("/");
+    const response = await server.get("/event");
 
     expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.body).toEqual({});
   });
-}
-);
+});

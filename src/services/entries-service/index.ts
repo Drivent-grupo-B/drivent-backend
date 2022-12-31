@@ -1,4 +1,4 @@
-import { cannotEntryError, conflictError, requestError } from "@/errors";
+import { conflictError, requestError } from "@/errors";
 import activitiesRepository from "@/repositories/activities-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import entriesRepository from "@/repositories/entries-repository";
