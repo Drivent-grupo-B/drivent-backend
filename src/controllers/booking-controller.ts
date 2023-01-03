@@ -62,9 +62,12 @@ export async function changeBooking(req: AuthenticatedRequest, res: Response) {
 export async function listRoomBookings(req: AuthenticatedRequest, res: Response) {
   try {
     const roomId = Number(req.params.roomId);
+
     const bookingList = await bookingService.getBookingsByRoomId(roomId);
+
     return res.status(httpStatus.OK).send(bookingList);
   } catch (error) {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+    if(error.name === "NotFoundError") return res.status(httpStatus.NOT_FOUND).send([]);
+    return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 }

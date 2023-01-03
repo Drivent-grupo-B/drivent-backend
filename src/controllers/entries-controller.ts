@@ -8,19 +8,16 @@ export async function createEntry(req: AuthenticatedRequest, res: Response) {
   
   //TODO validação do JOI
   const activityId  = Number(req.body.activityId);
-  
+
   if (!activityId) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
   
   try {
     const entry = await entriesService.createEntry(userId, activityId);
-  
+    
     return res.status(httpStatus.CREATED).send({ entryId: entry.id });
   } catch (error) {
-    if (error.name === "CannotEntryError") {
-      return res.sendStatus(httpStatus.FORBIDDEN);
-    }
     if (error.name === "ConflictError") {
       return res.sendStatus(httpStatus.CONFLICT);
     }

@@ -7,6 +7,6 @@ export async function getDefaultEvent(_req: Request, res: Response) {
     const event = await eventsService.getFirstEvent();
     return res.status(httpStatus.OK).send(event);
   } catch (error) {
-    return res.status(httpStatus.NOT_FOUND).send({});
+    if(error.name === "NotFoundError") return res.status(httpStatus.NOT_FOUND).send({});
   }
 }

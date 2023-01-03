@@ -1,4 +1,4 @@
-import { cannotEntryError, conflictError, requestError } from "@/errors";
+import { conflictError, requestError } from "@/errors";
 import activitiesRepository from "@/repositories/activities-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
 import entriesRepository from "@/repositories/entries-repository";
@@ -7,10 +7,7 @@ import { Activity, Entry } from "@prisma/client";
 
 async function createEntry(userId: number, activityId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) {
-    throw cannotEntryError();
-  }
-
+  
   const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
   if (ticket.status !== "PAID") {
     throw requestError(402, "PAYMENT_REQUIRED");
@@ -23,9 +20,9 @@ async function createEntry(userId: number, activityId: number) {
   }
   const userActivities = await entriesRepository.findUserActivities(userId);
   checkConflictingActivities(userActivities, activity);  
-  await entriesRepository.createEntry(userId, activityId);
+  const entry = await entriesRepository.createEntry(userId, activityId);
 
-  return ticket;
+  return entry;
 }
 
 function checkConflictingActivities(userActivities: (Entry & {
@@ -36,6 +33,7 @@ function checkConflictingActivities(userActivities: (Entry & {
   );
   const start1 = activity.startTime;
   const end1 = activity.endTime;
+
   userDayActivities.forEach((userActivity) => {
     const start2 = userActivity.Activity.startTime;
     const end2 = userActivity.Activity.endTime;
