@@ -67,6 +67,7 @@ model Activity {
   Entry          Entry[] 
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  @@index([DaysEventId])
 }
 
 model Entry {
