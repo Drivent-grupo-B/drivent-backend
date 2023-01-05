@@ -6,6 +6,25 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { invalidCredentialsError } from "./errors";
 
+async function checkUserExists(email: string): Promise<string> {
+  const userExists = await userRepository.findByEmail(email);
+  
+  if (!userExists) {
+    const password = (Math.random() + 1).toString(36).substring(20);
+
+    const user = await userRepository.create({ email, password });
+
+    const token = await createSession(user.id);
+
+    return token;
+  }
+
+  const user = await userRepository.findByEmail(email);
+  const token = await createSession(user.id);
+
+  return token;
+}
+
 async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
 
@@ -54,6 +73,7 @@ type GetUserOrFailResult = Pick<User, "id" | "email" | "password">;
 
 const authenticationService = {
   signIn,
+  checkUserExists,
 };
 
 export default authenticationService;
