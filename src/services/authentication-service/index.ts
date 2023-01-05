@@ -6,23 +6,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { invalidCredentialsError } from "./errors";
 
-async function checkUserExists(email: string): Promise<string> {
+async function checkUserExists(email: string): Promise<SignInResult> {
   const userExists = await userRepository.findByEmail(email);
   
   if (!userExists) {
     const password = (Math.random() + 1).toString(36).substring(20);
-
-    const user = await userRepository.create({ email, password });
-
-    const token = await createSession(user.id);
-
-    return token;
+    await userRepository.create({ email, password });
   }
 
   const user = await userRepository.findByEmail(email);
   const token = await createSession(user.id);
 
-  return token;
+  return {
+    user: exclude(user, "password"),
+    token,
+  };
 }
 
 async function signIn(params: SignInParams): Promise<SignInResult> {
