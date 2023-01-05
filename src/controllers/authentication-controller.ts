@@ -21,9 +21,9 @@ export async function signInGithub(req: Request, res: Response) {
   
     const user = await fetchUser(token);
     
-    const appToken = await authenticationService.checkUserExists(user.email);
+    const result = await authenticationService.checkUserExists(user.email);
 
-    return res.status(httpStatus.OK).send(appToken);
+    return res.status(httpStatus.OK).send(result);
   } catch (error) {
     return res.status(httpStatus.UNAUTHORIZED).send({});
   }
