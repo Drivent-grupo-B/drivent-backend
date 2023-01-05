@@ -18,9 +18,9 @@ beforeEach(async () => {
 
 const server = supertest(app);
 
-describe("GET /tickets/types", () => {
+function noToken(method: (url: string)=> supertest.Test, rout: string) {
   it("should respond with status 401 if no token is given", async () => {
-    const response = await server.get("/tickets/types");
+    const response = await method(rout);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
@@ -28,7 +28,7 @@ describe("GET /tickets/types", () => {
   it("should respond with status 401 if given token is not valid", async () => {
     const token = faker.lorem.word();
 
-    const response = await server.get("/tickets/types").set("Authorization", `Bearer ${token}`);
+    const response = await method(rout).set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
@@ -37,10 +37,15 @@ describe("GET /tickets/types", () => {
     const userWithoutSession = await createUser();
     const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
 
-    const response = await server.get("/tickets/types").set("Authorization", `Bearer ${token}`);
+    const response = await method(rout).set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
+}
+
+describe("GET /tickets/types", () => {
+  const i = server.get;
+  noToken(i, "/tickets/types");
 
   describe("when token is valid", () => {
     it("should respond with empty array when there are no ticket types created", async () => {
@@ -75,28 +80,8 @@ describe("GET /tickets/types", () => {
 });
 
 describe("GET /tickets", () => {
-  it("should respond with status 401 if no token is given", async () => {
-    const response = await server.get("/tickets");
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
-
-  it("should respond with status 401 if given token is not valid", async () => {
-    const token = faker.lorem.word();
-
-    const response = await server.get("/tickets").set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
-
-  it("should respond with status 401 if there is no session for given token", async () => {
-    const userWithoutSession = await createUser();
-    const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
-
-    const response = await server.get("/tickets").set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
+  const i = server.get;
+  noToken(i, "/tickets");
 
   describe("when token is valid", () => {
     it("should respond with status 404 when user doesnt have an enrollment yet", async () => {
@@ -149,28 +134,8 @@ describe("GET /tickets", () => {
 });
 
 describe("POST /tickets", () => {
-  it("should respond with status 401 if no token is given", async () => {
-    const response = await server.post("/tickets");
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
-
-  it("should respond with status 401 if given token is not valid", async () => {
-    const token = faker.lorem.word();
-
-    const response = await server.post("/tickets").set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
-
-  it("should respond with status 401 if there is no session for given token", async () => {
-    const userWithoutSession = await createUser();
-    const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
-
-    const response = await server.post("/tickets").set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
+  const i = server.post;
+  noToken(i, "/tickets");
 
   describe("when token is valid", () => {
     it("should respond with status 400 when ticketTypeId is not present in body", async () => {
