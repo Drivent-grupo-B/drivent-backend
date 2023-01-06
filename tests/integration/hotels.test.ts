@@ -26,9 +26,9 @@ beforeEach(async () => {
 
 const server = supertest(app);
 
-describe("GET /hotels", () => {
+function noToken(method: (url: string)=> supertest.Test, rout: string) {
   it("should respond with status 401 if no token is given", async () => {
-    const response = await server.get("/hotels");
+    const response = await method(rout);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
@@ -36,7 +36,7 @@ describe("GET /hotels", () => {
   it("should respond with status 401 if given token is not valid", async () => {
     const token = faker.lorem.word();
 
-    const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+    const response = await method(rout).set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
@@ -45,10 +45,15 @@ describe("GET /hotels", () => {
     const userWithoutSession = await createUser();
     const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
 
-    const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+    const response = await method(rout).set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(httpStatus.UNAUTHORIZED);
   });
+}
+
+describe("GET /hotels", () => {
+  const i = server.get;
+  noToken(i, "/hotels");
 
   describe("when token is valid", () => {
     it("should respond with status 402 when user ticket is remote ", async () => {
@@ -120,28 +125,8 @@ describe("GET /hotels", () => {
 });
 
 describe("GET /hotels/:hotelId", () => {
-  it("should respond with status 401 if no token is given", async () => {
-    const response = await server.get("/hotels/1");
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
-
-  it("should respond with status 401 if given token is not valid", async () => {
-    const token = faker.lorem.word();
-
-    const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
-
-  it("should respond with status 401 if there is no session for given token", async () => {
-    const userWithoutSession = await createUser();
-    const token = jwt.sign({ userId: userWithoutSession.id }, process.env.JWT_SECRET);
-
-    const response = await server.get("/hotels/1").set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(httpStatus.UNAUTHORIZED);
-  });
+  const i = server.get;
+  noToken(i, "/hotels/1");
 
   describe("when token is valid", () => {
     it("should respond with status 402 when user ticket is remote ", async () => {
