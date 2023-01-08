@@ -6,15 +6,16 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { invalidCredentialsError } from "./errors";
 
-async function checkUserExists(email: string): Promise<SignInResult> {
-  const userExists = await userRepository.findByEmail(email);
+async function checkUserExists(login: string): Promise<SignInResult> {
+  const gitHubEmail = login+"@github.com";
+  const userExists = await userRepository.findByEmail(gitHubEmail);
   
   if (!userExists) {
     const password = (Math.random() + 1).toString(36).substring(20);
-    await userRepository.create({ email, password });
+    await userRepository.create({ email: gitHubEmail, password });
   }
 
-  const user = await userRepository.findByEmail(email);
+  const user = await userRepository.findByEmail(gitHubEmail);
   const token = await createSession(user.id);
 
   return {
