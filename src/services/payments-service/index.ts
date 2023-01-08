@@ -40,8 +40,6 @@ async function paymentProcess(ticketId: number, userId: number, cardData: CardPa
 
   const payment = await paymentRepository.createPayment(ticketId, paymentData);
 
-  await ticketRepository.ticketProcessPayment(ticketId);
-
   return payment;
 }
 
