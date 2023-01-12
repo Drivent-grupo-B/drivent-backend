@@ -30,7 +30,6 @@ async function upsert(
     update: updatedEnrollment,
   });
   const enrollmentId = await enrollmentUpsert.then((enrollment) => enrollment.id);
-  console.log(enrollmentId);
   const adressUpsert = prisma.address.upsert({
     where: {
       enrollmentId,
