@@ -3,7 +3,7 @@ import "express-async-errors";
 import express, { Express } from "express";
 import cors from "cors";
 
-import { loadEnv, connectDb, disconnectDB } from "@/config";
+import { loadEnv, connectDb, disconnectDB, connectRedis, redisClient } from "@/config";
 
 loadEnv();
 
@@ -36,8 +36,15 @@ app
   .use("/activities", activitiesRoute)
   .use(handleApplicationErrors);
 
-export function init(): Promise<Express> {
+app.get("/jao", async (req, res) => {
+  await redisClient.set("user", "Filipe");
+  const user = await redisClient.get("user");
+  res.send(user);
+});
+
+export async function init(): Promise<Express> {
   connectDb();
+  await connectRedis();
   return Promise.resolve(app);
 }
 

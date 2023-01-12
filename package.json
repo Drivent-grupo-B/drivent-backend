@@ -7,7 +7,7 @@
     "prebuild": "rm -rf dist",
     "ci-build": "npm run build",
     "ci-package": "sap-cloud-sdk package",
-    "build": "ttsc -p tsconfig.build.json",    
+    "build": "ttsc -p tsconfig.build.json",
     "prepare": "husky install",
     "start": "node dist/server.js",
     "migration:run": "prisma migrate deploy",
@@ -97,6 +97,7 @@
     "http-status": "^1.5.2",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "redis": "^4.5.1",
     "reflect-metadata": "^0.1.13"
   }
 }
