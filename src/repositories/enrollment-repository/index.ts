@@ -22,25 +22,36 @@ async function upsert(
   updatedEnrollment: UpdateEnrollmentParams,
   address: CreateAddressParams
 ) {
-  const enrollmentUpsert = prisma.enrollment.upsert({
+  const enrollment = await prisma.enrollment.findFirst({
     where: {
       userId,
-    },
-    create: createdEnrollment,
-    update: updatedEnrollment,
+    }
   });
-  const enrollmentId = await enrollmentUpsert.then((enrollment) => enrollment.id);
-  const adressUpsert = prisma.address.upsert({
+  if (!enrollment.id) {
+    const enrollmentCreated = await prisma.enrollment.create({     
+      data: createdEnrollment,
+    });  
+    await prisma.address.create({      
+      data: {
+        ...address,
+        Enrollment: { connect: { id: enrollmentCreated.id } },
+      }   
+    });
+    return;
+  }
+  const enrollmentUpdate = prisma.enrollment.update({
     where: {
-      enrollmentId,
-    },
-    create: {
-      ...address,
-      Enrollment: { connect: { id: enrollmentId } },
-    },
-    update: address,
+      userId,
+    },    
+    data: updatedEnrollment,
+  });  
+  const adressUpdate = prisma.address.update({
+    where: {
+      enrollmentId: enrollment.id,
+    },    
+    data: address,
   });
-  return prisma.$transaction([enrollmentUpsert, adressUpsert]);
+  return prisma.$transaction([enrollmentUpdate, adressUpdate]);
 }
   
 export type CreateAddressParams = Omit<Address, "id" | "createdAt" | "updatedAt" | "enrollmentId">;
