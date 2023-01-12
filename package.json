@@ -25,7 +25,15 @@
     "dev:migration:run": "npm run dev:load-envs prisma migrate deploy",
     "dev:migration:generate": "npm run dev:load-envs prisma migrate dev",
     "dev:seed": "npm run dev:load-envs prisma db seed",
-    "dev": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts"
+    "dev": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "docker:dev:load-envs": "dotenv -e .env",
+    "docker:dev:migration:run": "npm run docker:dev:load-envs prisma migrate deploy",
+    "docker:dev:migration:generate": "npm run docker:dev:load-envs prisma migrate dev",
+    "docker:dev:seed": "npm run docker:dev:load-envs prisma db seed",
+    "docker:dev:run": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "docker:dev:create": "npm run docker:dev:migration:generate && npm run docker:dev:migration:run && npm run docker:dev:seed && npm run docker:dev:run",
+    "docker:dev:up": "sudo docker compose up --build",
+    "docker:dev:down": "sudo docker compose down"
   },
   "keywords": [
     "driven.t",
