@@ -9,7 +9,7 @@ async function findMany() {
 }
 
 async function findByDayId(dayId: number) {
-  return prisma.activity.findMany({
+  const activities =  await prisma.activity.findMany({
     where: {
       DaysEventId: dayId
     },
@@ -18,6 +18,8 @@ async function findByDayId(dayId: number) {
       Entry: true,
     }
   });
+
+  return activities;
 }
 
 async function findById(activityId: number) {
