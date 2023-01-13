@@ -11,7 +11,7 @@ services:
       - postgresDB
       - redisDB
     volumes:
-    - .:/app
+      - .:/app
 
   postgresDB:
     image: postgres:13
@@ -38,6 +38,6 @@ services:
     volumes:
       - redisDB:/data/redis
 
-volumes: 
-  postgresDB:
+volumes:
+  progresDB:
   redisDB:

@@ -172,14 +172,13 @@ async function seedActivities() {
 }
 
 async function seedTicketTypes(){
-  await prisma.ticketType.deleteMany()
   const ticketType = await prisma.ticketType.findMany()
 
   if(ticketType.length === 0){
     let ticketType = await prisma.ticketType.create({
       data: {
         name: 'Online',
-        price: 100000,
+        price: 10000,
         isRemote: true,
         includesHotel: false
       },
