@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
 const prisma = new PrismaClient();
-import { redisClient } from "../src/config"
 
 async function main() {
   let event = await prisma.event.findFirst();
