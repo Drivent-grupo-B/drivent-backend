@@ -32,8 +32,8 @@
     "docker:dev:seed": "npm run docker:dev:load-envs prisma db seed",
     "docker:dev:run": "NODE_ENV=docker nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
     "docker:dev:create": "npm run docker:dev:migration:generate && npm run docker:dev:migration:run && npm run docker:dev:seed && npm run docker:dev:run",
-    "docker:dev:up": "docker-compose up --build",
-    "docker:dev:down": "docker-compose down"
+    "docker:dev:up": "sudo docker-compose up --build",
+    "docker:dev:down": "sudo docker-compose down"
   },
   "keywords": [
     "driven.t",
