@@ -20,7 +20,7 @@ async function createEntry(userId: number, activityId: number) {
   }
   const userActivities = await entriesRepository.findUserActivities(userId);
   checkConflictingActivities(userActivities, activity);  
-  const entry = await entriesRepository.createEntry(userId, activityId);
+  const entry = await entriesRepository.createEntry(userId, activityId, activity.DaysEventId);
 
   return entry;
 }

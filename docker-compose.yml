@@ -39,5 +39,5 @@ services:
       - redisDB:/data/redis
 
 volumes: 
-  progresDB:
+  postgresDB:
   redisDB:
