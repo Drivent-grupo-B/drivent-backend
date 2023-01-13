@@ -18,6 +18,7 @@ async function createEntry(userId: number, activityId: number) {
   if (entriesOnActivity.length === activity.capacity) {
     throw conflictError("OverCapacity!");
   }
+
   const userActivities = await entriesRepository.findUserActivities(userId);
   checkConflictingActivities(userActivities, activity);  
   const entry = await entriesRepository.createEntry(userId, activityId, activity.DaysEventId);
