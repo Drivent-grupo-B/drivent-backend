@@ -7,7 +7,7 @@
     "prebuild": "rm -rf dist",
     "ci-build": "npm run build",
     "ci-package": "sap-cloud-sdk package",
-    "build": "ttsc -p tsconfig.build.json",    
+    "build": "ttsc -p tsconfig.build.json",
     "prepare": "husky install",
     "start": "node dist/server.js",
     "migration:run": "prisma migrate deploy",
@@ -30,7 +30,7 @@
     "docker:dev:migration:run": "npm run docker:dev:load-envs prisma migrate deploy",
     "docker:dev:migration:generate": "npm run docker:dev:load-envs prisma migrate dev",
     "docker:dev:seed": "npm run docker:dev:load-envs prisma db seed",
-    "docker:dev:run": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "docker:dev:run": "NODE_ENV=docker nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
     "docker:dev:create": "npm run docker:dev:migration:generate && npm run docker:dev:migration:run && npm run docker:dev:seed && npm run docker:dev:run",
     "docker:dev:up": "sudo docker-compose up --build",
     "docker:dev:down": "sudo docker-compose down"
@@ -97,6 +97,7 @@
     "http-status": "^1.5.2",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "redis": "^4.5.1",
     "reflect-metadata": "^0.1.13"
   }
 }

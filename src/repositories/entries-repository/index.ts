@@ -1,6 +1,7 @@
-import { prisma } from "@/config";
+import { prisma, redisClient } from "@/config";
 
-async function createEntry(userId: number, activityId: number) {
+async function createEntry(userId: number, activityId: number, dayId: number) {
+  await redisClient.del(String(dayId));
   return prisma.entry.create({    
     data: {
       userId,

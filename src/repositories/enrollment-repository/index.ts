@@ -27,7 +27,7 @@ async function upsert(
       userId,
     }
   });
-  if (!enrollment.id) {
+  if (!enrollment) {
     const enrollmentCreated = await prisma.enrollment.create({     
       data: createdEnrollment,
     });  
