@@ -6,7 +6,8 @@ async function findWithAddressByUserId(userId: number) {
     where: { userId },
     include: {
       Address: true,
-    },
+      User: true
+    }
   });
 }
 

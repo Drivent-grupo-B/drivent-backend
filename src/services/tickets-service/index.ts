@@ -25,6 +25,10 @@ async function getTicketByUserId(userId: number) {
   return ticket;
 }
 
+async function findTickeWithTypeById(ticketTypeId: number) {
+  return ticketRepository.findTickeWithTypeById(ticketTypeId);
+}
+
 async function createTicket(userId: number, ticketTypeId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) {
@@ -38,13 +42,14 @@ async function createTicket(userId: number, ticketTypeId: number) {
   };
 
   await ticketRepository.createTicket(ticketData);
-
+  
   const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
 
   return ticket;
 }
 
 const ticketService = {
+  findTickeWithTypeById,
   getTicketTypes,
   getTicketByUserId,
   createTicket
