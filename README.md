@@ -116,7 +116,7 @@ Add your postgres credentials and make sure to create given database before runn
 
 - Running application inside docker (postgres and node):
 
-Set `POSTGRES_HOST` to `drivent-postgres-development` for `.env.development` and `drivent-postgres-test` for `.env.test` file. It is the name of the postgres container inside docker-compose file. Docker Compose will start the postgres container for you, create the database and host alias for you.
+In order to run your application inside docker, than you must rename your `.env.development` file to `.env` and set `POSTGRES_HOST` to `postgresDB` for using development environment. It is the name of the postgres container inside docker-compose file. Docker Compose will start the postgres container for you, create the database and host alias for you.
 
 - Running application locally (node) but postgres is running inside docker:
 
